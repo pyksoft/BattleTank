@@ -10,7 +10,13 @@
 //  Copyright © 2016 Kevin Amiranoff. All rights reserved.
 //
 
+
+#pragma once
+#include <iostream>
 #include "FCowBullGame.h"
+#include <map>
+
+#define TMap std::map //Unreal map
 
 using FString = std::string; //Unreal string.
 using int32 = int; // Unreal integer
@@ -21,10 +27,8 @@ FBullCowGame::FBullCowGame() {
 
 void FBullCowGame::Reset() {
 
-    constexpr int32 MAX_TRIES = 5;
-    const FString HIDDEN_WORD = "planet";
+    const FString HIDDEN_WORD = "planet"; //Must be an isogram;
 
-    MyMaxTries = MAX_TRIES;
     MyHiddenWord = HIDDEN_WORD;
     MyCurrentTry = 1;
     bIsGameWon = false;
@@ -36,9 +40,10 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString guess) const {
 
     int32 GuessLength = guess.length();
 
-    if(false) {
+
+    if (!IsIsogram(guess)) {
         return EGuessStatus::Not_Isogram;
-    } else if (false) {
+    } else if (!IsLowercase(guess)) {
         return EGuessStatus::Not_Lowercase;
     } else if (GuessLength != GetHiddenWordLength()) {
         return EGuessStatus::Wrong_Number_Of_Letters;
@@ -80,14 +85,23 @@ FBullCowCount FBullCowGame::SubmitValidGuess(FString guess) {
         }
     }
 
-    if(BullCowCount.Bulls == HiddenWordLength) {
+    if (BullCowCount.Bulls == HiddenWordLength) {
         SetGameStatus(true);
     }
 
     return BullCowCount;
 }
 
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
+int32 FBullCowGame::GetMaxTries() const {
+    // difficulty table
+    TMap<int32, int32> WordLengthToMaxTries{{3, 5},
+                                            {4, 7},
+                                            {5, 10},
+                                            {6, 15},
+                                            {7, 20}};
+    return WordLengthToMaxTries[MyHiddenWord.length()];
+
+}
 
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 
@@ -99,4 +113,34 @@ int32 FBullCowGame::GetHiddenWordLength() const {
 bool FBullCowGame::SetGameStatus(bool gameStatus) {
     bIsGameWon = gameStatus;
     return bIsGameWon;
+}
+
+bool FBullCowGame::IsIsogram(FString word) const {
+    //if its empty or 1 letter length
+    if (word.length() <= 1) { return true; }
+
+    //loop through all letters
+    TMap<char, bool> LetterSeen; // TSet also possible (and better suited)
+    for (auto Letter : word) {
+        Letter = tolower(Letter);
+        //if the letter is in the map
+        if (LetterSeen.count(Letter) == 1) {
+            return false;     // not an isogram
+        } else { //otherwise adds letter to the map
+            LetterSeen[Letter] = Letter;
+        }
+
+    }
+
+
+    return true;
+}
+
+bool FBullCowGame::IsLowercase(FString word) const {
+    for (auto Letter : word) {
+        if (isupper(Letter)) {
+            return false;
+        }
+    }
+    return true;
 }

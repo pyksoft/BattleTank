@@ -3,11 +3,6 @@
 //  Copyright © 2016 Kevin Amiranoff. All rights reserved.
 //
 
-// Currently watching The Unreal Engine Developer Course
-// at lecture 42
-
-
-
 #include <iostream>
 #include "FCowBullGame.h"
 
@@ -45,8 +40,18 @@ void PrintGameIntro() {
     int32 HiddenWordLength = BCGame.GetHiddenWordLength();
 
     std::cout << std::endl;
-    std::cout << "Welcome to Bulls and Cows, a fun word game\n";
+    std::cout << "Welcome to Bulls and Cows, a fun word game\n\n";
+    std::cout << std::endl;
+    std::cout << "                               __.----.___\n"
+            "  ||            ||  (\\(__)/)-'||      ;--` ||\n"
+            " _||____________||___`(QQ)'___||______;____||_\n"
+            " -||------------||----)  (----||-----------||-\n"
+            " _||____________||___(o  o)___||______;____||_\n"
+            " -||------------||----`--'----||-----------||-\n"
+            "  ||            ||       `|| ||| || ||     || \n"
+            "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n\n";
     std::cout << "Can you guess the " << HiddenWordLength << " letters isogram I'm thinking of\n";
+    std::cout << "Bull mean you got the letter right, Cow means right letter wrong place\n";
     std::cout << std::endl;
     return;
 }
@@ -68,7 +73,7 @@ FText GetValidGuessFromPlayer(int32 currentTry) {
 
     do {
 
-        std::cout << "Trial n'" << currentTry << ". Enter your guess: ";
+        std::cout << "Trial n'" << currentTry << " of " << BCGame.GetMaxTries() << ". Enter your guess: ";
         std::getline(std::cin, Guess);
         Status = BCGame.CheckGuessValidity(Guess);
 
@@ -77,7 +82,7 @@ FText GetValidGuessFromPlayer(int32 currentTry) {
                 std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << " letter word.\n";
                 break;
             case EGuessStatus::Not_Isogram:
-                std::cout << "Please enter a word with not repeating letters (an isogram).\n";
+                std::cout << "Please enter a word with no repeating letters (an isogram).\n";
                 break;
             case EGuessStatus::Not_Lowercase:
                 std::cout << "Your word must be all lowercase.\n";

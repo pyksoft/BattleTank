@@ -2,6 +2,7 @@
 // Created by Kevin Amiranoff on 09/10/2016.
 //
 
+
 #ifndef COWBULLGAME_FCOWBULLGAME_H
 #define COWBULLGAME_FCOWBULLGAME_H
 
@@ -48,9 +49,11 @@ public:
 
 private:
     int32 MyCurrentTry;
-    int32 MyMaxTries;
     FString MyHiddenWord;
     bool bIsGameWon;
+
+    bool IsIsogram(FString) const;
+    bool IsLowercase(FString) const;
 };
 
 
