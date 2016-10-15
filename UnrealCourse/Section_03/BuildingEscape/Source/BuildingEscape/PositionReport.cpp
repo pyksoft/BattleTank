@@ -13,6 +13,8 @@ UPositionReport::UPositionReport()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+  
+  
 }
 
 
@@ -22,7 +24,16 @@ void UPositionReport::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+  
+  FString ObjectName = GetOwner() -> GetName();
+  FString x = FString::FromInt(GetOwner()-> GetActorLocation().X);
+  FString y = FString::FromInt(GetOwner()-> GetActorLocation().Y);
+  FString z = FString::FromInt(GetOwner()-> GetActorLocation().Z);
+  
+  FString ObjectPos = "Position x=" + x + " Position y="+ y + " Position z=" + z;
+  
+  UE_LOG(LogTemp, Warning, TEXT("%s is at %s"), *ObjectName, *ObjectPos);
+  
 }
 
 
