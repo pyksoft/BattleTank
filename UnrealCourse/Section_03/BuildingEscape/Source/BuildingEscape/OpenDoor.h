@@ -23,13 +23,22 @@ public:
 
 private:
   UPROPERTY(VisibleAnywhere)
-  float OpenAngle = 90.0f;
+  float OpenDoorAngle = -110.0f;
+  UPROPERTY(VisibleAnywhere)
+  float CloseDoorAngle = 180.0f;
   
   UPROPERTY(EditAnywhere)
   ATriggerVolume* PressurePlate;
   
+  UPROPERTY(EditAnywhere)
+  float DoorCloseDelay = 2.0f;
+  
+  float LastDoorOpenTime;
+
   AActor* ActorPointerThatOpens;
+  AActor* OwnerPointer;
   
   void OpenDoor();
+  void CloseDoor();
 	
 };
