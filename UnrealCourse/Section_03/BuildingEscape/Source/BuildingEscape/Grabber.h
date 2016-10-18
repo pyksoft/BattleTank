@@ -27,6 +27,14 @@ private:
   float Reach = 100.0f;
   
   UPhysicsHandleComponent* PhysicsHandle = nullptr; // Points to address 0 in memory
+  UInputComponent* InputComponent = nullptr;
   
-	
+  void FindPhysicsHandleComponent();
+  void SetupInputComponent();
+  
+  const FHitResult GetFirstPhysicsBodyInReach();
+  
+  // Ray cast and grad what is in reach
+  void Grab();
+  void Release();
 };
