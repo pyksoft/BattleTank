@@ -35,10 +35,13 @@ private:
   
   float LastDoorOpenTime;
 
-  AActor* ActorPointerThatOpens;
+  
+  
   AActor* OwnerPointer;
   
   void OpenDoor();
   void CloseDoor();
-	
+  float GetTotalMassOfActorsOnPlate();
+  
+  
 };
