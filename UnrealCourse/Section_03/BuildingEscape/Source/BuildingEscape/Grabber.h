@@ -31,10 +31,11 @@ private:
   
   void FindPhysicsHandleComponent();
   void SetupInputComponent();
-  
   const FHitResult GetFirstPhysicsBodyInReach();
-  
+  FVector GetPlayerStartOfReachLine();
+  FVector GetPlayerEndOfReachLine();
   // Ray cast and grad what is in reach
   void Grab();
   void Release();
+  
 };
