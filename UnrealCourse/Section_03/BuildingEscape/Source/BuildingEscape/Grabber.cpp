@@ -34,6 +34,9 @@ void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompon
 {
   Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
+  if(!PhysicsHandle) {
+    return; // prevent crash on runtime if !PhysicsHandle
+  }
   
   // if the physics handle is attached
   if(PhysicsHandle->GrabbedComponent) {
@@ -70,6 +73,12 @@ void UGrabber::SetupInputComponent() {
 
 void UGrabber::Grab() {
   
+  
+  
+  if(!PhysicsHandle) {
+    return; // prevent crash on runtime if !PhysicsHandle
+  }
+  
   // Line trace and see if we are in reach
   auto HitResult = GetFirstPhysicsBodyInReach();
   auto ComponentToGrab = HitResult.GetComponent(); // gets the mesh in our case
@@ -88,6 +97,12 @@ void UGrabber::Grab() {
 
 void UGrabber::Release() {
   UE_LOG(LogTemp, Warning, TEXT("Grabbing released"));
+  
+  
+  if(!PhysicsHandle) {
+    return; // prevent crash on runtime if !PhysicsHandle
+  }
+  
   PhysicsHandle->ReleaseComponent();
   
 }
