@@ -30,11 +30,12 @@ public:
   
   UPROPERTY(BluePrintAssignable)
   FDoorEvent OnCloseRequest;
-
-private:
   
   UPROPERTY(EditAnywhere)
   ATriggerVolume* PressurePlate = nullptr;
+
+private:
+
   
   AActor* OwnerPointer;
   

@@ -42,6 +42,7 @@ void UDoorEvent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComp
   // Poll the triigger volume every frame
   // TODO dont hardcode weight.
   if(GetTotalMassOfActorsOnPlate() > TriggerMass)  {
+    UE_LOG(LogTemp, Warning, TEXT("opening door") );
     OnOpenRequest.Broadcast();
     
   }else {
