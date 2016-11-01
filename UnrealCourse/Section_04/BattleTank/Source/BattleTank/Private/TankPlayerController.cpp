@@ -1,6 +1,8 @@
 // Battle Tank
 
+
 #include "BattleTank.h"
+#include "Tank.h"
 #include "TankPlayerController.h"
 
 #define OUT

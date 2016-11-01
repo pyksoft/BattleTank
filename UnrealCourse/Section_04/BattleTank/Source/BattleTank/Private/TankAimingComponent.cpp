@@ -1,8 +1,10 @@
 // Battle Tank
 
 #include "BattleTank.h"
+#include "TankBarrel.h"
 #include "TankAimingComponent.h"
 
+#define OUT
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -16,32 +18,46 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
-	// ...
-	
+  if(!Barrel) {
+    return;
+  }
+  
+  FVector OUT LaunchVElocity;
+  FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+  
+  // Calculate the Out Lanch Velocity
+
+  bool bHaveAimSolution =
+    UGameplayStatics::SuggestProjectileVelocity(this,
+                                                OUT LaunchVElocity,
+                                                StartLocation,
+                                                HitLocation,
+                                                LaunchSpeed,
+                                                false,
+                                                0,
+                                                0,
+                                                ESuggestProjVelocityTraceOption::DoNotTrace); //Parameter must be present.
+  
+  if(bHaveAimSolution){
+    FVector AimDirection = LaunchVElocity.GetSafeNormal();
+    MoveBarrelTowards(AimDirection);
+  }
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+  
+  //Work out difference between current barrel rotation, and AimDirection
+  FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
+  FRotator AimAsRotator = AimDirection.Rotation();
+  FRotator DeltaRotator = AimAsRotator - BarrelRotator;
+
+  Barrel->Elevate(DeltaRotator.Pitch); // Todo remove magic number
+  
 }
 
 
-// Called every frame
-void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
-{
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-
-	// ...
-}
-
-
-void UTankAimingComponent::AimAt(FVector HitLocation) {
-  FString TankName = GetOwner()->GetName();
-  FString BarrelLocation = Barrel->GetComponentLocation().ToString();
-  UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *TankName, *HitLocation.ToString(), *BarrelLocation);
-    
-}
-
-void UTankAimingComponent::setBarrelReference(UStaticMeshComponent* BarrelToSet){
+void UTankAimingComponent::setBarrelReference(UTankBarrel* BarrelToSet){
   Barrel = BarrelToSet;
-};
+}
