@@ -67,8 +67,6 @@ DerivedDataCache/*
 *.swo
 .ctrlp_cache/
 
-
-
 # Content Packs
 StarterContent/*
 GTFreeMaterials/*
