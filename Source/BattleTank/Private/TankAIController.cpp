@@ -18,11 +18,7 @@ void ATankAIController::BeginPlay() {
   if(!PlayerTank) {
     UE_LOG(LogTemp, Warning, TEXT("Could not find the player tank"));
 
-  }
-  
-  UE_LOG(LogTemp, Warning, TEXT("AIController Begin %s"), *(AITank->GetName()));
-  UE_LOG(LogTemp, Warning, TEXT("PlayerTank Found %s"), *(PlayerTank->GetName()));
-  
+  }  
 }
 
 
@@ -35,6 +31,7 @@ void ATankAIController::Tick(float DeltaSeconds) {
     
     //Aim towards the player
     GetAITank()->AimAt(GetPlayerTank()->GetActorLocation());
+    GetAITank()->Fire();
   }
   
 }
