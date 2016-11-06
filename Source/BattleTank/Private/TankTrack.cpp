@@ -11,9 +11,6 @@ void UTankTrack::SetThrottle(float Throttle) {
   FVector ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
   FVector ForceLocation = GetComponentLocation(); // Location of the Track
   
-  UE_LOG(LogTemp, Warning, TEXT("ForceApplied: %s"), *ForceApplied.ToString());
-  UE_LOG(LogTemp, Warning, TEXT("ForceLocation %s"), *ForceLocation.ToString());
-  UE_LOG(LogTemp, Warning, TEXT("Throttle %f"), Throttle);
   auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
   TankRoot->AddForceAtLocation(ForceApplied, ForceLocation );
 }

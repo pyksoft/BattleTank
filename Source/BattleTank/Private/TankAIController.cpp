@@ -3,6 +3,7 @@
 #include "BattleTank.h"
 #include "Tank.h"
 #include "TankAIController.h"
+// Depends on movement component via pathfinding system.
 
 void ATankAIController::BeginPlay() {
   Super::BeginPlay();
@@ -10,27 +11,22 @@ void ATankAIController::BeginPlay() {
   ATank* AITank = GetAITank();
   
   ATank* PlayerTank = GetPlayerTank();
-  
-  if(!AITank) {
-    UE_LOG(LogTemp, Warning, TEXT("Not possesing a tank"));
-  }
-  
-  if(!PlayerTank) {
-    UE_LOG(LogTemp, Warning, TEXT("Could not find the player tank"));
 
-  }  
 }
 
 
 void ATankAIController::Tick(float DeltaSeconds) {
   Super::Tick(DeltaSeconds);
   
-  if(GetPlayerTank()){
-    // TODO Move towards the player
+  ATank* PlayerTank = GetPlayerTank();
+              
+  if(ensure(PlayerTank)){
+    // Move towards the player
     
+    MoveToActor(PlayerTank, AcceptanceRadius);
     
     //Aim towards the player
-    GetAITank()->AimAt(GetPlayerTank()->GetActorLocation());
+    GetAITank()->AimAt(PlayerTank->GetActorLocation());
     GetAITank()->Fire();
   }
   
@@ -46,7 +42,7 @@ ATank* ATankAIController::GetAITank() const {
 ATank* ATankAIController::GetPlayerTank() const {
   
   APawn* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-  if(!PlayerPawn) {
+  if(!ensure(PlayerPawn)) {
     return nullptr;
   }
   ATank* PlayerTank = Cast<ATank>(PlayerPawn);

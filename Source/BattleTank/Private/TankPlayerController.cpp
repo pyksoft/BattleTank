@@ -3,35 +3,34 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
+#include "TankAimingComponent.h"
 #include "TankPlayerController.h"
 
 #define OUT
 
 void ATankPlayerController::BeginPlay() {
   Super::BeginPlay();
-  
+
+  auto AimingComponentRef = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+  if(!ensure(AimingComponentRef)) { return; }
+    FoundAimingComponent(AimingComponentRef);
 }
 
 // Called every frame
 void ATankPlayerController::Tick( float DeltaTime )
 {
   Super::Tick( DeltaTime );
-
-
   AimTowardsCrosshair();
-  
-  
 }
 
 
 ATank* ATankPlayerController::GetControlledTank() const {
-  
  return Cast<ATank>(GetPawn());
-
 }
 
+
 void ATankPlayerController::AimTowardsCrosshair(){
-  if(!GetControlledTank()){
+  if(!ensure(GetControlledTank())) {
     return;
   }
   
@@ -44,9 +43,7 @@ void ATankPlayerController::AimTowardsCrosshair(){
     GetControlledTank()->AimAt(HitLocation);
   }
  
-  
 
-  
 }
 
 bool ATankPlayerController::GetSightRayHitLocation(OUT FVector& HitLocation) const {
@@ -66,8 +63,6 @@ bool ATankPlayerController::GetSightRayHitLocation(OUT FVector& HitLocation) con
     // line trace along that look direction, and see what we hit ( up to max range)
     GetLookVectorHitLocation(LookDirection, OUT HitLocation);
   }
-  
-  
   
   return true;
 }
@@ -92,8 +87,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, OUT 
                                           StartLocation,
                                           EndLocation,
                                           ECollisionChannel::ECC_Visibility)){
-    
-    
     HitLocation = HitResult.Location;
     return true;
   }

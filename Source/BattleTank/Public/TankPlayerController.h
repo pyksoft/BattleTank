@@ -8,23 +8,32 @@
 #define OUT
 
 class ATank;
+class UTankAimingComponent;
+
 
 /**
- * 
+ * The player Controller.
  */
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-	
+protected:
+  UFUNCTION(BlueprintCallable, Category = "Setup")
+  ATank* GetControlledTank() const;
+  
+  
+  //Doesnt need implementation with macro.
+  UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+  void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+  
 private:
   
   virtual void BeginPlay() override;
   virtual void Tick( float DeltaSeconds ) override;
 	
-  
-  ATank* GetControlledTank() const;
+
   void AimTowardsCrosshair();
   bool GetSightRayHitLocation( OUT FVector& HitLocation ) const;
   bool GetLookDirection(FVector2D ScreenLocation, OUT FVector& LookDirection) const;

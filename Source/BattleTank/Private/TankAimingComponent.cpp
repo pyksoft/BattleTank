@@ -19,9 +19,42 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
+void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
+  Barrel = BarrelToSet;
+  Turret = TurretToSet;
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+  
+  
+  if(!ensure(Barrel)) {return;}
+  //Work out difference between current barrel rotation, and AimDirection
+  FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
+  FRotator AimAsRotator = AimDirection.Rotation();
+  FRotator DeltaRotator = AimAsRotator - BarrelRotator;
+  
+  Barrel->Elevate(DeltaRotator.Pitch); // Todo remove magic number
+  
+}
+
+
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection) {
+  
+  
+  if(!ensure(Turret)) {return;}
+  
+  FRotator TurretRotator = Turret->GetForwardVector().Rotation();
+  FRotator AimAsRotator = AimDirection.Rotation();
+  FRotator DeltaRotator = AimAsRotator - TurretRotator;
+  //
+  
+  Turret->Rotate(DeltaRotator.Yaw);
+}
+
+
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 
-  if(!Barrel || !Turret) {
+  if(!ensure(Barrel)) {
     return;
   }
   
@@ -48,34 +81,3 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
   }
 }
 
-void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
-  
-  //Work out difference between current barrel rotation, and AimDirection
-  FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
-  FRotator AimAsRotator = AimDirection.Rotation();
-  FRotator DeltaRotator = AimAsRotator - BarrelRotator;
-
-  Barrel->Elevate(DeltaRotator.Pitch); // Todo remove magic number
-  
-}
-
-
-void UTankAimingComponent::MoveTurretTowards(FVector AimDirection) {
-  FRotator TurretRotator = Turret->GetForwardVector().Rotation();
-  FRotator AimAsRotator = AimDirection.Rotation();
-  FRotator DeltaRotator = AimAsRotator - TurretRotator;
-  //
-  
-  Turret->Rotate(DeltaRotator.Yaw);
-}
-
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet){
-  if(!BarrelToSet){return;}
-  Barrel = BarrelToSet;
-}
-
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet) {
-   if(!TurretToSet){return;}
-  Turret = TurretToSet;
-}
