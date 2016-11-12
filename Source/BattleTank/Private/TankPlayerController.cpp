@@ -25,6 +25,11 @@ void ATankPlayerController::Tick( float DeltaTime )
 
 void ATankPlayerController::AimTowardsCrosshair(){
   
+  // Prevent crash if not possessing tank
+  if(!GetPawn()) {
+    return;
+  }
+  
   UTankAimingComponent* AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
   
   if(!ensure(AimingComponent)) {
@@ -33,8 +38,10 @@ void ATankPlayerController::AimTowardsCrosshair(){
   
   FVector HitLocation; //Out Parameter
   
-   // Get world location linetrace through crosshair
-  if(GetSightRayHitLocation(OUT HitLocation)) {
+  // Get world location linetrace through crosshair
+  bool bGotHitLocation = GetSightRayHitLocation(OUT HitLocation);
+  
+  if(bGotHitLocation) {
     // if it hits the landscape
     // Tell controlled tank to aim at this point
     AimingComponent->AimAt(HitLocation);
@@ -58,10 +65,10 @@ bool ATankPlayerController::GetSightRayHitLocation(OUT FVector& HitLocation) con
   FVector LookDirection;
   if( GetLookDirection(ScreenLocation, OUT LookDirection)) {
     // line trace along that look direction, and see what we hit ( up to max range)
-    GetLookVectorHitLocation(LookDirection, OUT HitLocation);
+    return GetLookVectorHitLocation(LookDirection, OUT HitLocation);
   }
   
-  return true;
+  return false;
 }
 
 
